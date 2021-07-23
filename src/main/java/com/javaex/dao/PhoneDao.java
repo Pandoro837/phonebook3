@@ -1,40 +1,46 @@
 package com.javaex.dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import com.javaex.vo.PersonVo;
 
+@Repository
 public class PhoneDao {
 	
 	//필드
+	@Autowired
+	private DataSource dataSource;
+	
 	private Connection conn = null;
 	private PreparedStatement pstmt = null;
 	private ResultSet rs = null;
 	
-	private String driver = "oracle.jdbc.driver.OracleDriver";
-	private String url = "jdbc:oracle:thin:@localhost:1521:xe";
-	private String id ="phonedb";
-	private String pw ="phonedb";
+//	private String driver = "oracle.jdbc.driver.OracleDriver";
+//	private String url = "jdbc:oracle:thin:@localhost:1521:xe";
+//	private String id ="phonedb";
+//	private String pw ="phonedb";
 	
 	//db와 연결
 	private void getConnection() {
 		try {
 		    // 1. JDBC 드라이버 (Oracle) 로딩
-			Class.forName(driver);
+//			Class.forName(driver);
 		    // 2. Connection 얻어오기
-			conn = DriverManager.getConnection(url, id, pw);
+			conn = dataSource.getConnection();
 		 
-		} catch (ClassNotFoundException e) {
-		    System.out.println("error: 드라이버 로딩 실패 - " + e);
 		} catch (SQLException e) {
 		    System.out.println("error:" + e);
-		}
+		} 
 	}
 	
 	//db와 연결 해제

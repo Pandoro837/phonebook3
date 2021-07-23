@@ -2,6 +2,7 @@ package com.javaex.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -16,7 +17,9 @@ import com.javaex.vo.PersonVo;
 @Controller // 이 클래스가 콘트롤러라고 알려주는 어노테이션(주석)
 @RequestMapping(value = "/pb") // 클래스 자체에 RequestMapping을 붙일 경우, 내부의 메소드들은 /pb/ - 가 된다
 public class PhoneController {
-
+	
+	@Autowired
+	private PhoneDao phoneDao;		//외부에서 접근하지 못하게 접근제한자는 private로 설정해주는 것이 좋다
 	private String test = "PhoneBookController - ";
 
 	// 리스트
@@ -25,9 +28,6 @@ public class PhoneController {
 	public String list(Model model) {
 
 		System.out.println(this.test + "list");
-
-		// Dao호출
-		PhoneDao phoneDao = new PhoneDao();
 
 		// Dao를 사용, 리스트 가져오기
 		List<PersonVo> personList = phoneDao.getList();
@@ -59,8 +59,6 @@ public class PhoneController {
 
 		System.out.println(personVo.toString());
 
-		// dao 호출
-		PhoneDao phoneDao = new PhoneDao();
 		// 사용하여 insert
 		int iCount = phoneDao.insert(personVo);
 
@@ -76,7 +74,6 @@ public class PhoneController {
 
 		System.out.println(this.test + "delete");
 
-		PhoneDao phoneDao = new PhoneDao();
 		phoneDao.delete(personId);
 
 		String url = "/pb/list";
@@ -88,8 +85,6 @@ public class PhoneController {
 	public String updateForm(Model model, @RequestParam("personId") int personId) {
 
 		System.out.println(this.test + "updateForm");
-
-		PhoneDao phoneDao = new PhoneDao();
 
 		model.addAttribute("personInfo", phoneDao.getPerson(personId));
 
@@ -103,7 +98,6 @@ public class PhoneController {
 		
 		System.out.println(this.test + "update");
 		
-		PhoneDao phoneDao = new PhoneDao();
 		phoneDao.update(personUpdate);
 		
 		String url = "/pb/list";
